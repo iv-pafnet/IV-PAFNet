@@ -1,0 +1,13 @@
+__include__:
+  - './common_73e.yml'
+
+output_dir: ${OUTPUT_ROOT}/paper_73e/DV_Baseline_S44
+seed: 44
+# Baseline (ISA+MSFA disabled), seed 44.
+FusionDETR:
+  use_purification: False
+  use_alignment: False
+
+HybridEncoder:
+  use_channel_attention: False
+  use_spatial_attention: False

@@ -1,0 +1,16 @@
+﻿__include__:
+  - './DV_Baseline_S44.yml'
+
+# Single-GPU adaptation for one RTX PRO 6000 Blackwell 96 GB.
+# It preserves the global batch size of 8 but is not numerically identical to
+# the four-GPU x 2-pairs-per-GPU configuration.
+output_dir: ${OUTPUT_ROOT}/single_pro6000_73e/DV_Baseline_S44
+checkpoint_step: 73
+
+train_dataloader:
+  batch_size: 8
+  num_workers: 8
+
+val_dataloader:
+  batch_size: 8
+  num_workers: 8

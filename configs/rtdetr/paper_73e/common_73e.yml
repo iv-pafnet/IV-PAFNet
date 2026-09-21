@@ -1,0 +1,89 @@
+# =============================================================================
+# 73-epoch release configuration shared by the included seed variants
+#
+# This file defines 73 completed epochs and a global batch size of 8.
+# The four-GPU configuration uses two paired images per GPU. A one-GPU run with
+# batch size 8 is a different execution setting and need not be numerically
+# identical. T_max remains 300 while training stops after epoch index 72.
+# These settings apply only to configurations that explicitly include this file.
+# =============================================================================
+
+__include__:
+  - '../../dataset/coco_detection.yml'
+  - '../../runtime.yml'
+  - '../include/dataloader.yml'
+  - '../include/rtdetr_r50vd.yml'
+
+epoches: 73
+log_step: 20
+checkpoint_step: 10
+
+use_amp: True
+use_ema: True
+ema:
+  type: ModelEMA
+  decay: 0.9999
+  warmups: 2000
+
+# Component variants may leave instantiated parameters unused during backpropagation.
+find_unused_parameters: True
+sync_bn: False
+clip_max_norm: 0.1
+
+num_classes: 5
+remap_mscoco_category: True
+
+train_dataloader:
+  dataset:
+    img_folder: ${DATASET_ROOT}/DroneVehicle/train/trainimg
+    img_folder_ir: ${DATASET_ROOT}/DroneVehicle/train/trainimgr
+    ann_file: ${DATASET_ROOT}/DroneVehicle/coco_annotations/instances_train.json
+  shuffle: True
+  # Four-GPU configuration: 4 GPUs x 2 pairs/GPU = global batch 8.
+  batch_size: 2
+  num_workers: 4
+  drop_last: True
+
+val_dataloader:
+  dataset:
+    img_folder: ${DATASET_ROOT}/DroneVehicle/val/valimg
+    img_folder_ir: ${DATASET_ROOT}/DroneVehicle/val/valimgr
+    ann_file: ${DATASET_ROOT}/DroneVehicle/coco_annotations/instances_val.json
+  shuffle: False
+  batch_size: 2
+  num_workers: 4
+  drop_last: False
+
+FusionDETR:
+  multi_scale: ~
+
+PResNet:
+  pretrained: True
+
+optimizer:
+  type: AdamW
+  params:
+    -
+      params: 'backbone'
+      lr: 0.00001
+    -
+      params: '^(?=.*encoder(?=.*bias|.*norm.*weight)).*$'
+      weight_decay: 0.
+    -
+      params: '^(?=.*decoder(?=.*bias|.*norm.*weight)).*$'
+      weight_decay: 0.
+  lr: 0.0001
+  betas: [0.9, 0.999]
+  weight_decay: 0.0001
+
+lr_scheduler:
+  type: CosineAnnealingLR
+  T_max: 300          # Scheduler horizon; training stops after 73 completed epochs.
+  eta_min: 0.000001
+
+# RT-DETR uses L1 and GIoU losses; keep the configured GIoU weight explicit.
+RTDETRCriterion:
+  weight_dict:
+    loss_vfl: 1
+    loss_bbox: 5
+    loss_giou: 2

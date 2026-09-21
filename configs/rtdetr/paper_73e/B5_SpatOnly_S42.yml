@@ -1,0 +1,13 @@
+__include__:
+  - './common_73e.yml'
+
+output_dir: ${OUTPUT_ROOT}/paper_73e/B5_SpatOnly_S42
+seed: 42
+# MSFA ablation: spatial reliability only.
+FusionDETR:
+  use_purification: False
+  use_alignment: False
+
+HybridEncoder:
+  use_channel_attention: False
+  use_spatial_attention: True

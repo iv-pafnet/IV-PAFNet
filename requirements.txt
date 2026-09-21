@@ -1,0 +1,8 @@
+# Tested release environment. Install the CUDA build from the official PyTorch index.
+torch==2.7.1
+torchvision==0.22.1
+numpy==2.1.3
+scipy==1.15.3
+PyYAML==6.0.2
+Pillow==11.3.0
+pycocotools==2.0.11

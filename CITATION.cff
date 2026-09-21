@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite the IV-PAFNet article."
+title: "IV-PAFNet"
+type: software
+authors:
+  - family-names: Yuan
+    given-names: Cheng
+  - family-names: Shang
+    given-names: Shichang
+  - family-names: Zhang
+    given-names: Jinghao
+  - family-names: Zhang
+    given-names: Yang
+  - family-names: Zhou
+    given-names: Bin
+repository-code: "https://github.com/iv-pafnet/IV-PAFNet"
+license: MIT

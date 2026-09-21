@@ -1,0 +1,13 @@
+__include__:
+  - './common_73e.yml'
+
+output_dir: ${OUTPUT_ROOT}/paper_73e/B2_AlignOnly_S42
+seed: 42
+# ISA ablation: visible-guided alignment only.
+FusionDETR:
+  use_purification: False
+  use_alignment: True
+
+HybridEncoder:
+  use_channel_attention: False
+  use_spatial_attention: False

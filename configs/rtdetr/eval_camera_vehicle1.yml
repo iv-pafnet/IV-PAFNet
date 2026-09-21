@@ -1,0 +1,67 @@
+__include__:
+  - '../dataset/coco_detection.yml'
+  - '../runtime.yml'
+  - '../rtdetr/include/dataloader.yml'
+  - '../rtdetr/include/rtdetr_r50vd.yml'
+
+# =============================================================================
+# Cross-domain generalization evaluation: DroneVehicle -> Camera-vehicle1
+#
+# Cross-scene evaluation without target-domain fine-tuning: a DroneVehicle-trained
+# checkpoint is evaluated directly on the ground-camera dataset.
+#
+# Dataset layout expected by this configuration: 12,483 RGB/IR pairs
+#   - visible/test/   12,483 images
+#   - infrared/test/  12,483 images (same file names; 10 extra "(1)" duplicates
+#                     are Windows copy artefacts and are NOT referenced by the
+#                     annotation file, so they are ignored)
+#   - annotations/instances_test.json   12,483 images / 156,574 annotations
+#
+# Categories: the annotation file declares exactly 3 classes (car, truck, bus),
+# which are the semantically shared classes with DroneVehicle. The prediction
+# head therefore stays at num_classes: 5, and pycocotools
+# evaluates only the 3 classes present in the ground truth.
+#
+# Set CV_ROOT to the directory that contains visible/ infrared/ annotations/.
+#
+# num_workers: 0 for the same Windows-spawn reason as the other eval configs.
+# =============================================================================
+
+output_dir: ${OUTPUT_ROOT}/eval_camera_vehicle1
+
+use_amp: True
+seed: 42
+num_classes: 5
+remap_mscoco_category: True
+
+train_dataloader:
+  dataset:
+    img_folder: ${DATASET_ROOT}/DroneVehicle/train/trainimg
+    img_folder_ir: ${DATASET_ROOT}/DroneVehicle/train/trainimgr
+    ann_file: ${DATASET_ROOT}/DroneVehicle/coco_annotations/instances_train.json
+  shuffle: True
+  batch_size: 2
+  num_workers: 0
+  drop_last: True
+
+val_dataloader:
+  dataset:
+    img_folder: ${CV_ROOT}/visible/test
+    img_folder_ir: ${CV_ROOT}/infrared/test
+    ann_file: ${CV_ROOT}/annotations/instances_test.json
+  shuffle: False
+  batch_size: 2
+  num_workers: 0
+  drop_last: False
+
+FusionDETR:
+  multi_scale: ~
+
+PResNet:
+  pretrained: False
+
+RTDETRCriterion:
+  weight_dict:
+    loss_vfl: 1
+    loss_bbox: 5
+    loss_giou: 2

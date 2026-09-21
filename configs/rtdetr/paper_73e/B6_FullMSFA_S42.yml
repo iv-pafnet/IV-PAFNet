@@ -1,0 +1,13 @@
+__include__:
+  - './common_73e.yml'
+
+output_dir: ${OUTPUT_ROOT}/paper_73e/B6_FullMSFA_S42
+seed: 42
+# MSFA ablation: full MSFA.
+FusionDETR:
+  use_purification: False
+  use_alignment: False
+
+HybridEncoder:
+  use_channel_attention: True
+  use_spatial_attention: True

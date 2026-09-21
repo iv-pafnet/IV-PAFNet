@@ -1,0 +1,31 @@
+# End-to-end engineering smoke test. This is not a paper experiment.
+__include__:
+  - './paper_73e/DV_Full_S42.yml'
+
+epoches: 1
+log_step: 1
+checkpoint_step: 1
+output_dir: ${OUTPUT_ROOT}/training_smoke
+
+PResNet:
+  pretrained: False
+
+train_dataloader:
+  dataset:
+    img_folder: ${SMOKE_DATASET_ROOT}/DroneVehicle/train/trainimg
+    img_folder_ir: ${SMOKE_DATASET_ROOT}/DroneVehicle/train/trainimgr
+    ann_file: ${SMOKE_DATASET_ROOT}/DroneVehicle/coco_annotations/instances_train.json
+  shuffle: False
+  batch_size: 1
+  num_workers: 0
+  drop_last: False
+
+val_dataloader:
+  dataset:
+    img_folder: ${SMOKE_DATASET_ROOT}/DroneVehicle/val/valimg
+    img_folder_ir: ${SMOKE_DATASET_ROOT}/DroneVehicle/val/valimgr
+    ann_file: ${SMOKE_DATASET_ROOT}/DroneVehicle/coco_annotations/instances_val.json
+  shuffle: False
+  batch_size: 1
+  num_workers: 0
+  drop_last: False

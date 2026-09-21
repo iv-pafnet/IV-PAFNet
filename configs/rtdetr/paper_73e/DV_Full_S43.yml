@@ -1,0 +1,13 @@
+__include__:
+  - './common_73e.yml'
+
+output_dir: ${OUTPUT_ROOT}/paper_73e/DV_Full_S43
+seed: 43
+# Full model (IV-PAFNet), seed 43.
+FusionDETR:
+  use_purification: True
+  use_alignment: True
+
+HybridEncoder:
+  use_channel_attention: True
+  use_spatial_attention: True

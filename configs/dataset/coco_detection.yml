@@ -1,0 +1,41 @@
+task: detection
+
+# ---------------------------------------------------------------------------
+# Default dataset definition for DroneVehicle (5 vehicle classes).
+#
+# This file is included by most configs under configs/rtdetr/. Paths are
+# resolved from the environment; see env.sh and README.md for the expected
+# directory layout under ${DATASET_ROOT}.
+# ---------------------------------------------------------------------------
+num_classes: 5  # DroneVehicle: car, truck, bus, van, freight_car
+remap_mscoco_category: False
+
+train_dataloader:
+  type: DataLoader
+  dataset:
+    type: CocoDetection
+    img_folder: ${DATASET_ROOT}/DroneVehicle/train/trainimg       # visible (RGB) images
+    img_folder_ir: ${DATASET_ROOT}/DroneVehicle/train/trainimgr   # infrared (IR) images
+    ann_file: ${DATASET_ROOT}/DroneVehicle/coco_annotations/instances_train.json
+    transforms:
+      type: Compose
+      ops: ~
+  shuffle: True
+  batch_size: 4  # adjust to your GPU memory
+  num_workers: 4
+  drop_last: True
+
+val_dataloader:
+  type: DataLoader
+  dataset:
+    type: CocoDetection
+    img_folder: ${DATASET_ROOT}/DroneVehicle/val/valimg
+    img_folder_ir: ${DATASET_ROOT}/DroneVehicle/val/valimgr
+    ann_file: ${DATASET_ROOT}/DroneVehicle/coco_annotations/instances_val.json
+    transforms:
+      type: Compose
+      ops: ~
+  shuffle: False
+  batch_size: 4
+  num_workers: 4
+  drop_last: False

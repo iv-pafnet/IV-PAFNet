@@ -1,0 +1,13 @@
+__include__:
+  - './common_73e.yml'
+
+output_dir: ${OUTPUT_ROOT}/paper_73e/B1_PurifOnly_S42
+seed: 42
+# ISA ablation: purification only.
+FusionDETR:
+  use_purification: True
+  use_alignment: False
+
+HybridEncoder:
+  use_channel_attention: False
+  use_spatial_attention: False
