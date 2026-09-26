@@ -8,7 +8,7 @@ __include__:
 # Cross-domain generalization evaluation: DroneVehicle -> Camera-vehicle1
 #
 # Cross-scene evaluation without target-domain fine-tuning: a DroneVehicle-trained
-# checkpoint is evaluated directly on the ground-camera dataset.
+# checkpoint is evaluated directly on the paired infrared-visible dataset.
 #
 # Dataset layout expected by this configuration: 12,483 RGB/IR pairs
 #   - visible/test/   12,483 images
